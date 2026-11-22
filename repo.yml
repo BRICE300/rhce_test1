@@ -1,0 +1,34 @@
+---
+- name: test1
+  hosts: dev
+  become: true
+
+
+  tasks: 
+
+    - name: Import a key from a url
+      ansible.builtin.rpm_key:
+        state: present
+        key: http://apt.sw.be/RPM-GPG-KEY.dag.txt
+
+
+    - name: baseos-internal
+      ansible.builtin.yum_repository:
+        name: Red Hat Enterprise Linux 10 for x86_64 - BaseOS (RPMs)
+        description: rhel-10-for-x86_64-baseos
+        file: internal_repos
+        baseurl: http://content.example.com/rhel10.0/x86_64/dvd/BaseOS
+        gpgcheck: yes
+        gpgkey: http://apt.sw.be/RPM-GPG-KEY.dag.txt
+        enabled: yes
+
+    - name: AppStream-internal
+      ansible.builtin.yum_repository:
+        name: Red Hat Enterprise Linux 10 for x86_64 - AppStream (RPMs)
+        description: rhel-10-for-x86_64-AppStream
+        file: internal_repos
+        baseurl: http://content.example.com/rhel10.0/x86_64/dvd/AppStream
+        gpgcheck: yes
+        gpgkey: http://apt.sw.be/RPM-GPG-KEY.dag.txt
+        enabled: yes
+
