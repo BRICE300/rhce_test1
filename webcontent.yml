@@ -1,0 +1,43 @@
+---
+- name: tasks 6
+  hosts: dev
+  become: true
+
+
+  tasks:
+
+    - name: Create a directory if it does not exist
+      ansible.builtin.file:
+        path: /devweb
+        state: directory
+        mode: '2755'
+        owner: ansible
+        group: ansible
+        setype: httpd_sys_content_t
+
+    - name: Copy using inline content
+      ansible.builtin.copy:
+        content: 'Developement'
+        dest: /devweb/index.html
+        setype: httpd_sys_content_t
+
+
+    - name: Create a symbolic link
+      ansible.builtin.file:
+        src: /devweb
+        dest: /var/www/html/devweb
+        owner: ansible
+        group: ansible
+        state: link
+        setype: httpd_sys_content_t
+
+    - name: Permanently enable http service, also enable it immediately if possible
+      ansible.posix.firewalld:
+        service: http
+        state: enabled
+        permanent: true
+        immediate: true
+        offline: true
+
+
+
