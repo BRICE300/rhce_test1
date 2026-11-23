@@ -10,7 +10,7 @@
       ansible.builtin.file:
         path: /devweb
         state: directory
-        mode: '2755'
+        mode: '2775'
         owner: ansible
         group: ansible
         setype: httpd_sys_content_t
