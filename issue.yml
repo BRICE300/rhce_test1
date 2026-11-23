@@ -1,0 +1,51 @@
+---
+- name: replace content
+  hosts: dev
+  become: true
+
+  tasks:
+
+    - name: creation du fichier issue
+      ansible.builtin.file:
+        path: /etc/issue
+        state: touch
+
+    - name: Copy content to the file issue
+      ansible.builtin.copy:
+        content: 'Developement'
+        dest: /etc/issue
+
+
+
+- name: replace content
+  hosts: test
+  become: true
+    
+  tasks:
+    
+    - name: creation du fichier issue
+      ansible.builtin.file:
+        path: /etc/issue
+        state: touch
+
+    - name: Copy content to the file issue
+      ansible.builtin.copy:
+        content: 'Test'
+        dest: /etc/issue
+
+- name: replace content
+  hosts: prod
+  become: true
+    
+  tasks:
+    
+    - name: creation du fichier issue
+      ansible.builtin.file:
+        path: /etc/issue
+        state: touch
+
+    - name: Copy content to the file issue
+      ansible.builtin.copy:
+        content: 'Production'
+        dest: /etc/issue
+
