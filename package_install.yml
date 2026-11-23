@@ -1,0 +1,48 @@
+---
+- name: install mariadb and php
+  hosts: dev,test
+  become: true
+
+  vars:
+
+    packages:
+      
+        - php
+        - mariadb-server
+
+
+  tasks: 
+
+
+    - name: Install the latest version of Apache
+      ansible.builtin.dnf:
+        name: "{{ packages }}"
+        state: present
+
+- name: install developement tools
+  hosts: prod
+  become: true
+
+  tasks: 
+
+    - name: Install the 'Development tools' package group
+      ansible.builtin.dnf:
+        name: '@Development tools'
+        state: present
+
+
+
+- name: install mariadb and php
+  hosts: dev
+  become: true
+
+  tasks: 
+
+    - name: Upgrade all packages
+      ansible.builtin.dnf:
+        name: "*"
+        state: latest
+
+
+
+
