@@ -1,0 +1,40 @@
+---
+- name: create a LVM
+  hosts: dev
+  become: true
+
+
+  tasks:
+
+    - name: Create a volume group on top of /dev/sdb
+      community.general.lvg:
+        vg: firefly
+        pvs: /dev/sdb
+        pvresize: true
+
+    - name: Create a logical volume of 512m
+      community.general.lvol:
+        vg: firefly
+        lv: firefly_lvm
+        size: 512
+
+    - name: Create a ext4 filesystem 
+      community.general.filesystem:
+        fstype: ext4
+        dev: /dev/firefly/firefly_lvm
+
+    - name: Create a directory 
+      ansible.builtin.file:
+        path: /etc/firefly_lvm/
+        state: directory
+        mode: '0755'
+
+    - name: Mount up device by UUID
+      ansible.posix.mount:
+        path: /etc/firefly_lvm/
+        src: /dev/firefly/firefly_lvm
+        fstype: ext4
+        opts: noatime
+        state: mounted
+
+
