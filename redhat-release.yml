@@ -1,0 +1,38 @@
+---
+- name:  create a file file and replace the content
+  hosts: all
+  become: true
+
+
+  tasks:
+
+    - name: Touch a file
+      ansible.builtin.file:
+        path: /etc/redhat-release
+        state: touch
+
+- name:  create a file file and replace the content
+  hosts: dev
+  become: true
+    
+    
+  tasks:
+
+    - name: Copy using inline content
+      ansible.builtin.copy:
+        content: '# username rajan'
+        dest: /etc/redhat-release
+
+- name:  create a file file and replace the content
+  hosts: prod
+  become: true
+
+
+  tasks:
+
+    - name: Copy using inline content
+      ansible.builtin.copy:
+        content: '# YouTube channel=devops-wala'
+        dest: /etc/redhat-release
+    
+
