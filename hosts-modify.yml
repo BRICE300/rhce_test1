@@ -1,0 +1,26 @@
+---
+- name: hosts modify
+  hosts: all
+  become: true
+
+  tasks:
+
+    - name: create a file temp-hosts
+      ansible.builtin.file:
+        path: /etc/temp-myhosts
+        state: touch
+        owner: ansible
+        group: ansible
+        mode: '2775'
+
+
+- name: copy template to manage node
+  hosts: all
+  become: true
+  tasks:
+
+    - name: Template a file to /etc/file.conf
+      ansible.builtin.template:
+        src: /home/devops/exam1/mydomain-hostfile1.j2
+        dest: /etc/temp-myhosts
+
