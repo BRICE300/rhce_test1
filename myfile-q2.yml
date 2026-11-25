@@ -1,0 +1,24 @@
+---
+- name: create file and directory
+  hosts: all 
+  become: true
+
+
+  tasks: 
+
+    - name: Create a directory if it does not exist
+      ansible.builtin.file:
+        path: /etc/secured_data
+        state: directory
+        mode: '0700'
+
+    - name: Touch a file under the directory secured
+      ansible.builtin.file:
+        path: /etc/secured_data/secret.txt
+        state: touch
+        mode: '0600'
+
+
+
+
+
