@@ -1,0 +1,71 @@
+---
+- name: lvm and rescure mode
+  hosts: node2
+  become: true
+
+  tasks:
+
+    - name: check if the lv3 exist
+      ansible.builtin.debug:
+        msg: "device is not present "
+      when: ansible_lvm.vgs.toto is not  defined
+
+    - block:
+
+
+        - name: Create a vgs
+          community.general.lvg:
+            vg: toto
+            pvs: /dev/sdb
+
+        - name: Create a logical volume of 512m
+          community.general.lvol:
+            vg: toto
+            lv: redrose
+            size: 10G
+
+      rescue:
+
+        - name: Print the gateway for each host when defined
+          ansible.builtin.debug:
+            msg: " Disk lack of space "
+    
+        - name: Create andirectory
+          community.general.lvg:
+            vg: toto
+            pvs: /dev/sdb
+
+        - name: Create a logical volume of 512m
+          community.general.lvol:
+            vg: toto
+            lv: redrose
+            size: 4G
+        
+
+        - name: Create a ext4 filesystem on /dev/sdb1
+          community.general.filesystem:
+            fstype: ext4
+            dev: /dev/toto/redrose
+
+
+        - name: Create a directory to mount the disk
+          ansible.builtin.file:
+            path: /etc/redose_disk
+            state: directory
+
+
+        - name: Mount the disk inside redose
+          ansible.posix.mount:
+            path: /etc/redose_disk
+            src: /dev/toto/redrose
+            fstype: ext4
+            opts: noatime
+            state: mounted
+
+
+
+
+
+
+
+
